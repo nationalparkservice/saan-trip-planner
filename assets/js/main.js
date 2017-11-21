@@ -263,7 +263,7 @@ NPMap = {
             }
           },
           tooltip: '{{POINAME}}',
-          url: arcgisURL + 16 + arcgisQuery
+          url: arcgisURL + "SAAN_Pavilion/FeatureServer/0/" + arcgisQuery
         });	
 		
 		minorLayers.riverAccess = L.npmap.layer.geojson({
