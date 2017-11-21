@@ -4,7 +4,7 @@
 var transitRouteNumbers = [242,40]
 
 //   The location of the ArcGIS feature server where the NPS and partner data are accessible.
-var arcgisURL = "https://services1.arcgis.com/fBc8EJBxQRMcHlei/arcgis/rest/services/SAAN1/FeatureServer/"
+var arcgisURL = "https://services1.arcgis.com/fBc8EJBxQRMcHlei/ArcGIS/rest/services/"
 
 var arcgisQuery = "/query?f=geojson&outSR=4326&where=" + encodeURIComponent("\"ISEXTANT\"='Yes'")
 //   The query that should be used when calling objects from the arcGIS server. By default, just pulls all objects that exist and requests geoJSON format.
@@ -145,7 +145,7 @@ NPMap = {
             }
           },
           tooltip: '{{TRLNAME}}',
-          url: arcgisURL + 18 + arcgisQuery
+          url: arcgisURL + "SAAN_San_Juan_Acequia_Trail/FeatureServer/0" + arcgisQuery
         }).addTo(map);
 		
         majorLayers.aceSites = L.npmap.layer.geojson({
@@ -160,7 +160,7 @@ NPMap = {
             }
           },
           tooltip: '{{POINAME}}',
-          url: arcgisURL + 8 + arcgisQuery + '&outFields=POINAME,NOTES'
+          url: arcgisURL + "SAAN_Acequia/FeatureServer/0" + arcgisQuery + '&outFields=POINAME,NOTES'
         }).addTo(map);
 		
         majorLayers.missions = L.npmap.layer.geojson({
