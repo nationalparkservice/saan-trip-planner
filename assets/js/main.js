@@ -204,7 +204,7 @@ NPMap = {
             title: 'Bike and car-only Road Routes'
           },
           tooltip: 'Bike and car-only Road Routes',
-          url: arcgisURL + 21 + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike Only'")
+          url: arcgisURL + "SAAN_River_Walk_Mission_Trails/FeatureServer/0" + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike Only'")
         }).addTo(map);
 		
         majorLayers.onStreetBikePed = L.npmap.layer.geojson({
@@ -219,7 +219,7 @@ NPMap = {
             }
           },
           tooltip: 'Road Routes',
-          url: arcgisURL + 21 + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike and Ped'")+ encodeURIComponent("and\"TRLNAME\"='Mission Trail Route'")
+          url: arcgisURL + "SAAN_River_Walk_Mission_Trails/FeatureServer/0" + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike and Ped'")+ encodeURIComponent("and\"TRLNAME\"='Mission Trail Route'")
         }).addTo(map);
 		
         majorLayers.riverWalkMain = L.npmap.layer.geojson({
@@ -234,7 +234,7 @@ NPMap = {
             }
           },
           tooltip: '{{TRLLABEL}}',
-          url: arcgisURL + 21 + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike and Ped'")+ encodeURIComponent("and\"level_\"='Main = River Walk'") + '&outFields=TRLLABEL'
+          url: arcgisURL + "SAAN_River_Walk_Mission_Trails/FeatureServer/0" + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike and Ped'")+ encodeURIComponent("and\"level_\"='Main = River Walk'") + '&outFields=TRLLABEL'
         }).addTo(map);
 		
 		majorLayers.cityParks = L.npmap.layer.geojson({
@@ -289,7 +289,7 @@ NPMap = {
             }
           },
           tooltip: '{{POINAME}}',
-          url: arcgisURL + 13 + arcgisQuery
+          url: arcgisURL + "SAAN_Water_Fountain/FeatureServer/0" + arcgisQuery
         });	
 		
 		minorLayers.picnic = L.npmap.layer.geojson({
@@ -302,7 +302,7 @@ NPMap = {
             }
           },
           tooltip: '{{POINAME}}',
-          url: arcgisURL + 9 + arcgisQuery
+          url: arcgisURL + "SAAN_Picnic_Area/FeatureServer/0" + arcgisQuery
         });	
 		
 		minorLayers.restroom = L.npmap.layer.geojson({
@@ -315,7 +315,7 @@ NPMap = {
             }
           },
           tooltip: '{{POINAME}}',
-          url: arcgisURL + 7 + arcgisQuery
+          url: arcgisURL + "SAAN_Restroom/FeatureServer/0" + arcgisQuery
         });	
 		
         minorLayers.parking = L.npmap.layer.geojson({
@@ -328,7 +328,7 @@ NPMap = {
             }
           },
           tooltip: 'Parking Area',
-          url: arcgisURL + 10 + arcgisQuery
+          url: arcgisURL + "SAAN_Parking/FeatureServer/0" + arcgisQuery
         });
 		
         minorLayers.ped = L.npmap.layer.geojson({
@@ -344,7 +344,7 @@ NPMap = {
             }
           },
           tooltip: 'Pedestrians-only trail',
-          url: arcgisURL + 21 + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Ped Only'") + '&outFields=TRLLABEL'
+          url: arcgisURL + "SAAN_River_Walk_Mission_Trails/FeatureServer/0" + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Ped Only'") + '&outFields=TRLLABEL'
         });
 		
         minorLayers.secondary = L.npmap.layer.geojson({
@@ -355,7 +355,7 @@ NPMap = {
             title: 'River Walk Connections'
           },
           tooltip: '{{TRLLABEL}}',
-          url: arcgisURL + 21 + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike and Ped'")+ encodeURIComponent("and\"level_\"='Secondary - Riverwalk or Mission Tr. offshoots'") + '&outFields=TRLLABEL'
+          url: arcgisURL + "SAAN_River_Walk_Mission_Trails/FeatureServer/0" + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike and Ped'")+ encodeURIComponent("and\"level_\"='Secondary - Riverwalk or Mission Tr. offshoots'") + '&outFields=TRLLABEL'
         });
 		
         minorLayers.visitorCenters = L.npmap.layer.geojson({
@@ -369,7 +369,7 @@ NPMap = {
             }
           },
           tooltip: '{{POINAME}}',
-          url: arcgisURL + 17 + arcgisQuery
+          url: arcgisURL + "SAAN_Visitor_Center/FeatureServer/0" + arcgisQuery
         });
 		
         minorLayers.information = L.npmap.layer.geojson({
@@ -383,7 +383,7 @@ NPMap = {
             }
           },
           tooltip: '{{POINAME}}',
-          url: arcgisURL + 3 + arcgisQuery
+          url: arcgisURL + "SAAN_Information/FeatureServer/0" + arcgisQuery
         });
 		
         topLayers.minor = L.npmap.layer.geojson({
