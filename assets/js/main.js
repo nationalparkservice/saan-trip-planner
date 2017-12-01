@@ -1,13 +1,16 @@
 // Parameters
 
-//   The VIA transit routes that should be displayed on the map into this parameter. 
+//   The VIA transit routes that should be displayed on the map into this parameter.
 var transitRouteNumbers = [242,40]
 
 //   The location of the ArcGIS feature server where the NPS and partner data are accessible.
 var arcgisURL = "https://services1.arcgis.com/fBc8EJBxQRMcHlei/ArcGIS/rest/services/"
 
-var arcgisQuery = "/query?f=geojson&outSR=4326&where=" + encodeURIComponent("\"ISEXTANT\"='Yes'")
 //   The query that should be used when calling objects from the arcGIS server. By default, just pulls all objects that exist and requests geoJSON format.
+var arcgisQuery = "/query?f=geojson&outSR=4326&where=" + encodeURIComponent("\"ISEXTANT\"='Yes'")
+
+var bcycleStations = 'https://gbfs.bcycle.com/bcycle_sanantonio/station_information.json'
+var bcycleStatus = 'https://gbfs.bcycle.com/bcycle_sanantonio/station_status.json'
 
 /* globals $, L */
 
@@ -130,9 +133,9 @@ NPMap = {
         $legend = $('#trueLegendContent');
         $legendButton = $('#trueLegendButton');
         L.DomEvent.disableClickPropagation(document.getElementById('legendCont'));
-        
+
 		// Set up layers from GIS map services
-		
+
 		majorLayers.aceLines = L.npmap.layer.geojson({
           popup: {
             description: 'These trails provide visitors up-close views of the acequias that originally irrigated the fields around the missions.',
@@ -147,7 +150,7 @@ NPMap = {
           tooltip: '{{TRLNAME}}',
           url: arcgisURL + "SAAN_San_Juan_Acequia_Trail/FeatureServer/0" + arcgisQuery
         }).addTo(map);
-		
+
         majorLayers.aceSites = L.npmap.layer.geojson({
           popup: {
             description: '{{NOTES}}',
@@ -162,7 +165,7 @@ NPMap = {
           tooltip: '{{POINAME}}',
           url: arcgisURL + "SAAN_Acequia/FeatureServer/0" + arcgisQuery + '&outFields=POINAME,NOTES'
         }).addTo(map);
-		
+
         majorLayers.missions = L.npmap.layer.geojson({
           popup: function (feature) {
             return '<b>' + feature.Full_Name + '</b><p>' + feature.Desc + '</p><p><a href=' + feature.Link + '>More information</a></p>' + '<p><a href=' + feature.Directions + '>Directions</a></p>';
@@ -178,14 +181,14 @@ NPMap = {
           tooltip: 'Mission {{Name}}',
           url: 'https://nationalparkservice.github.io/saan-trip-planner/data/cmpndsites.geojson'
         }).addTo(map);
-		
+
          /*majorLayers.missionTrails = L.npmap.layer.geojson({
           popup: {
             description: 'The River Walk and connecting trails.',
             title: 'River Walk'
           },
           styles:  function() {
-		  
+
 			  return {
 				line: {
 				  'stroke': '#ff0044',
@@ -194,8 +197,8 @@ NPMap = {
           },
           tooltip: 'River Walk',
           url: 'https://nationalparkservice.github.io/saan-trip-planner/data/mainTrails.geojson'
-        }).addTo(map);    */   
-		
+        }).addTo(map);    */
+
 		majorLayers.onStreetBikeOnly = L.npmap.layer.geojson({
           color: '#ff9900',
           dashArray: '5, 10',
@@ -206,7 +209,7 @@ NPMap = {
           tooltip: 'Bike and car-only Road Routes',
           url: arcgisURL + "SAAN_River_Walk_Mission_Trails/FeatureServer/0" + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike Only'")
         }).addTo(map);
-		
+
         majorLayers.onStreetBikePed = L.npmap.layer.geojson({
           popup: {
             description: 'For cyclists and pedestrians.',
@@ -221,7 +224,7 @@ NPMap = {
           tooltip: 'Road Routes',
           url: arcgisURL + "SAAN_River_Walk_Mission_Trails/FeatureServer/0" + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike and Ped'")+ encodeURIComponent("and\"TRLNAME\"='Mission Trail Route'")
         }).addTo(map);
-		
+
         majorLayers.riverWalkMain = L.npmap.layer.geojson({
           popup: {
             description: 'The River Walk and connecting trails.',
@@ -236,12 +239,12 @@ NPMap = {
           tooltip: '{{TRLLABEL}}',
           url: arcgisURL + "SAAN_River_Walk_Mission_Trails/FeatureServer/0" + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike and Ped'")+ encodeURIComponent("and\"level_\"='Main = River Walk'") + '&outFields=TRLLABEL'
         }).addTo(map);
-		
+
 		majorLayers.cityParks = L.npmap.layer.geojson({
            popup: {
             description: '{{ParkType}}',
             title: '{{ParkName}}'
-          },         
+          },
 		  styles: {
             polygon: {
               'fill': '#9bb474',
@@ -252,7 +255,7 @@ NPMap = {
           tooltip: '{{ParkName}}',
           url: 'https://nationalparkservice.github.io/saan-trip-planner/data/cityParks.geojson'
         }).addTo(map);
-		
+
         minorLayers.pavilion = L.npmap.layer.geojson({
           popup: {
             title: '{{POINAME}}'
@@ -264,8 +267,8 @@ NPMap = {
           },
           tooltip: '{{POINAME}}',
           url: arcgisURL + "SAAN_Pavilion/FeatureServer/0/" + arcgisQuery
-        });	
-		
+        });
+
 		minorLayers.riverAccess = L.npmap.layer.geojson({
           popup: {
             title: '{{POINAME}}'
@@ -277,8 +280,8 @@ NPMap = {
           },
           tooltip: '{{POINAME}}',
           url: arcgisURL + 14 + arcgisQuery
-        });	
-		
+        });
+
 		minorLayers.water = L.npmap.layer.geojson({
           popup: {
             title: '{{POINAME}}'
@@ -290,8 +293,8 @@ NPMap = {
           },
           tooltip: '{{POINAME}}',
           url: arcgisURL + "SAAN_Water_Fountain/FeatureServer/0" + arcgisQuery
-        });	
-		
+        });
+
 		minorLayers.picnic = L.npmap.layer.geojson({
           popup: {
             title: '{{POINAME}}'
@@ -303,8 +306,8 @@ NPMap = {
           },
           tooltip: '{{POINAME}}',
           url: arcgisURL + "SAAN_Picnic_Area/FeatureServer/0" + arcgisQuery
-        });	
-		
+        });
+
 		minorLayers.restroom = L.npmap.layer.geojson({
           popup: {
             title: '{{POINAME}}'
@@ -316,8 +319,8 @@ NPMap = {
           },
           tooltip: '{{POINAME}}',
           url: arcgisURL + "SAAN_Restroom/FeatureServer/0" + arcgisQuery
-        });	
-		
+        });
+
         minorLayers.parking = L.npmap.layer.geojson({
           popup: {
             title: '{{POINAME}}'
@@ -330,7 +333,7 @@ NPMap = {
           tooltip: 'Parking Area',
           url: arcgisURL + "SAAN_Parking/FeatureServer/0" + arcgisQuery
         });
-		
+
         minorLayers.ped = L.npmap.layer.geojson({
           popup: {
             description: 'Only pedestrians are allowed on downtown sections of the River Walk and certain other trails.',
@@ -346,7 +349,7 @@ NPMap = {
           tooltip: 'Pedestrians-only trail',
           url: arcgisURL + "SAAN_River_Walk_Mission_Trails/FeatureServer/0" + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Ped Only'") + '&outFields=TRLLABEL'
         });
-		
+
         minorLayers.secondary = L.npmap.layer.geojson({
           color: '#ff0044',
           opacity: 0.8,
@@ -357,7 +360,7 @@ NPMap = {
           tooltip: '{{TRLLABEL}}',
           url: arcgisURL + "SAAN_River_Walk_Mission_Trails/FeatureServer/0" + arcgisQuery + encodeURIComponent("and\"Route_Type\"='Bike and Ped'")+ encodeURIComponent("and\"level_\"='Secondary - Riverwalk or Mission Tr. offshoots'") + '&outFields=TRLLABEL'
         });
-		
+
         minorLayers.visitorCenters = L.npmap.layer.geojson({
           popup: {
             title: '{{POINAME}}'
@@ -371,7 +374,7 @@ NPMap = {
           tooltip: '{{POINAME}}',
           url: arcgisURL + "SAAN_Visitor_Center/FeatureServer/0" + arcgisQuery
         });
-		
+
         minorLayers.information = L.npmap.layer.geojson({
           popup: {
             title: '{{POINAME}}'
@@ -385,7 +388,7 @@ NPMap = {
           tooltip: '{{POINAME}}',
           url: arcgisURL + "SAAN_Information/FeatureServer/0" + arcgisQuery
         });
-		
+
         topLayers.minor = L.npmap.layer.geojson({
           cluster: true,
           popup: {
@@ -400,9 +403,9 @@ NPMap = {
           tooltip: '{{Facility}}',
           url: 'https://nationalparkservice.github.io/saan-trip-planner/data/CombinedFacilities.geojson'
         }).addTo(map);
-        
+
 		// Query TransitLand API to get routes for each route listed in transitRouteNumbers parameter variable above.
-		
+
 		for (i in transitRouteNumbers) {
 			$.ajax({
 			  success: function (data) {
@@ -422,13 +425,13 @@ NPMap = {
 				  },
 				  data: data
 				});
-				
+
 				// Push route geoJSON layer onto array that holds all transit geoJSON layers
 				transitRoutes.push(newRoute);
-				
+
 				// Store the route's OneStop ID for stops call
 				var onestop = data.features[0].properties.onestop_id;
-				
+
 				// Initiate call for stops geoJSON layer
 				$.ajax({
 				  success: function (data) {
@@ -487,7 +490,7 @@ NPMap = {
 								console.log("error getting data");
 							}
 						});
-						
+
 						return popupStr;
 					  },
 					  styles: {
@@ -498,16 +501,16 @@ NPMap = {
 					tooltip: 'Bus Stop',
 					  data: data
 					});
-					
+
 					// Push route geoJSON layer onto array that holds all transit geoJSON layers
 					transitStops.push(newStops);
 					// Get schedule stop pairs for each stop
 				  },
-					
+
 				  type: 'GET',
 				  url: 'https://transit.land/api/v1/stops.geojson?served_by='+onestop
-				});	
-				
+				});
+
 			  },
 			  type: 'GET',
 			  // Use the route's onestop ID to retrieve all stops associated with this route
@@ -515,12 +518,10 @@ NPMap = {
 			});
         }
 
+        // Set up Bcycle stations
+
         $.ajax({
-          beforeSend: function (xhr) {
-            xhr.setRequestHeader('ApiKey', apiKey);
-          },
           headers: {
-            'ApiKey': apiKey,
             'Cache-Control': 'no-cache'
           },
           success: function (data) {
@@ -528,20 +529,20 @@ NPMap = {
 
             bcycleData = data.data;
 
-            for (var i in bcycleData) {
-              var station = bcycleData[i];
-              var newStation = L.marker([station.Location.Latitude, station.Location.Longitude]);
+            for (var i in bcycleData.stations) {
+              var station = bcycleData.stations[i];
+              var newStation = L.marker([station.lat, station.long]);
 
-              newStation.bcycleID = station.Id;
-              newStation.title = station.Name;
-              newStation.openBikes = station.BikesAvailable;
-              newStation.openDocks = station.DocksAvailable;
-              newStation.status = station.Status;
-              newStation.bindPopup('' +
+              newStation.bcycleID = station.station_id;
+              newStation.title = station.name;
+              //newStation.openBikes = station.BikesAvailable;
+              //newStation.openDocks = station.DocksAvailable;
+              //newStation.status = station.Status;
+              /* newStation.bindPopup('' +
                 '<b>B-cycle: ' + newStation.title + '</b>' +
                 '<p>Bikes available: ' + newStation.openBikes + '<br>Docks available: ' + newStation.openDocks + '</p>' +
                 '<p>For more information on B-cycle, visit <a href="https://sanantonio.bcycle.com/">sanantonio.bcycle.com</a></p>' +
-              '');
+              '');*/
               newStation.setIcon(L.icon({
                 iconSize: [20, 20],
                 iconUrl: 'https://nationalparkservice.github.io/saan-trip-planner/icons/bcycle.gif'
@@ -552,8 +553,10 @@ NPMap = {
             minorLayers.bcycle = bcycleLayer;
           },
           type: 'GET',
-          url: 'https://enigmatic-castle-8864.herokuapp.com/?type=json&url=' + encodeURIComponent('https://publicapi.bcycle.com/api/1.0/ListProgramKiosks/48')
+          url: bcycleStations
         });
+
+
         $('#buttonCloseLegend').click(function () {
           $legend.hide();
           $legendButton.show();
