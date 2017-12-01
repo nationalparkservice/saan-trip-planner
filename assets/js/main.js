@@ -522,35 +522,47 @@ NPMap = {
 
         $.ajax({
           headers: {
-            'Cache-Control': 'no-cache'
+            //'Cache-Control': 'no-cache'
           },
           success: function (data) {
-            var bcycleLayer = L.layerGroup();
+            $.ajax({
+              type: 'GET',
+              url: bcycleStatus,
+              success: function(data2){
+                var bcycleLayer = L.layerGroup();
 
-            bcycleData = data.data;
+                bcycleData_info = data.data;
+                bcycleData_status = data2.data;
 
-            for (var i in bcycleData.stations) {
-              var station = bcycleData.stations[i];
-              var newStation = L.marker([station.lat, station.long]);
+                for (var i in bcycleData_info.stations) {
+                  var station = bcycleData_info.stations[i];
+                  var station_status = bcycleData_status.stations[i];
+                  if (station_status.is_installed == 1 && station_status.is_renting == 1 && station_status.is_returning == 1)
+                  {
+                    var newStation = L.marker([station.lat, station.lon]);
 
-              newStation.bcycleID = station.station_id;
-              newStation.title = station.name;
-              //newStation.openBikes = station.BikesAvailable;
-              //newStation.openDocks = station.DocksAvailable;
-              //newStation.status = station.Status;
-              /* newStation.bindPopup('' +
-                '<b>B-cycle: ' + newStation.title + '</b>' +
-                '<p>Bikes available: ' + newStation.openBikes + '<br>Docks available: ' + newStation.openDocks + '</p>' +
-                '<p>For more information on B-cycle, visit <a href="https://sanantonio.bcycle.com/">sanantonio.bcycle.com</a></p>' +
-              '');*/
-              newStation.setIcon(L.icon({
-                iconSize: [20, 20],
-                iconUrl: 'https://nationalparkservice.github.io/saan-trip-planner/icons/bcycle.gif'
-              }));
-              bcycleLayer.addLayer(newStation);
+                    newStation.bcycleID = station.station_id;
+                    newStation.title = station.name;
+                    newStation.openBikes = station_status.num_bikes_available;
+                    newStation.openDocks = station_status.num_docks_available;
+                    //newStation.status = station.Status;
+                     newStation.bindPopup('' +
+                      '<b>B-cycle: ' + newStation.title + '</b>' +
+                      '<p>Bikes available: ' + newStation.openBikes + '<br>Docks available: ' + newStation.openDocks + '</p>' +
+                      '<p>For more information on B-cycle, visit <a href="https://sanantonio.bcycle.com/">sanantonio.bcycle.com</a></p>' +
+                    '');
+                    newStation.setIcon(L.icon({
+                      iconSize: [20, 20],
+                      iconUrl: 'https://nationalparkservice.github.io/saan-trip-planner/icons/bcycle.gif'
+                    }));
+                    bcycleLayer.addLayer(newStation);
+                  }
+                }
+
+                minorLayers.bcycle = bcycleLayer;
+              }
             }
-
-            minorLayers.bcycle = bcycleLayer;
+            )
           },
           type: 'GET',
           url: bcycleStations
